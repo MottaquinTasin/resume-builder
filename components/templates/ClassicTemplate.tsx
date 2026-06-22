@@ -7,13 +7,52 @@ interface Props {
 
 function SectionTitle({ title, color }: { title: string; color: string }) {
   return (
-    <div style={{ marginBottom: 6 }}>
-      <h2 style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color }}>
-        {title}
-      </h2>
-      <div style={{ height: 1, backgroundColor: color, marginTop: 2 }} />
-    </div>
+    <h2
+      style={{
+        fontSize: 10.5,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        letterSpacing: '0.12em',
+        color,
+        borderBottom: `1px solid ${color}`,
+        paddingBottom: 2,
+        marginBottom: 6,
+      }}
+    >
+      {title}
+    </h2>
   );
+}
+
+/** Two-line entry header: org+location, then role+dates (right-aligned). */
+function EntryHeader({
+  org, location, role, dates,
+}: { org: string; location?: string; role?: string; dates?: string }) {
+  const row: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 };
+  const left: React.CSSProperties = { minWidth: 0, flex: '1 1 auto' };
+  const right: React.CSSProperties = { flexShrink: 0, textAlign: 'right', whiteSpace: 'nowrap', fontSize: 9.5 };
+  return (
+    <>
+      <div style={row}>
+        <span style={{ ...left, fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{org}</span>
+        {location && <span style={{ ...right, fontWeight: 700 }}>{location}</span>}
+      </div>
+      {(role || dates) && (
+        <div style={row}>
+          <span style={{ ...left, fontStyle: 'italic', fontSize: 10, color: '#222' }}>{role}</span>
+          {dates && <span style={{ ...right, color: '#444' }}>{dates}</span>}
+        </div>
+      )}
+    </>
+  );
+}
+
+const ul: React.CSSProperties = { margin: '3px 0 0 0', paddingLeft: 16, listStyleType: 'disc' };
+const li: React.CSSProperties = { fontSize: 9.5, color: '#222', marginBottom: 2, lineHeight: 1.45 };
+
+function dateRange(start: string, end: string, current?: boolean): string {
+  const e = current ? 'Present' : end;
+  return [start, e].filter(Boolean).join(' – ');
 }
 
 export default function ClassicTemplate({ sections, accentColor }: Props) {
@@ -30,56 +69,45 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
 
   const ordered = sections.filter((s) => s.enabled && s.type !== 'contact');
 
+  const contactLine = contact
+    ? [contact.location, contact.phone, contact.email, contact.website, contact.linkedin, contact.github].filter(Boolean)
+    : [];
+
   return (
-    <div style={{ fontFamily: 'Georgia, serif', fontSize: 10, color: '#1a1a1a', lineHeight: 1.4 }}>
+    <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: 10, color: '#1a1a1a', lineHeight: 1.4 }}>
       {/* Header */}
       {contact && (
-        <div style={{ textAlign: 'center', marginBottom: 12 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: accentColor, marginBottom: 4, fontFamily: 'Georgia, serif' }}>
+        <div style={{ textAlign: 'center', marginBottom: 14 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, letterSpacing: '0.06em', marginBottom: 4 }}>
             {contact.name || 'Your Name'}
           </h1>
-          <div style={{ fontSize: 9, color: '#555', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 12px' }}>
-            {contact.email && <span>{contact.email}</span>}
-            {contact.phone && <span>{contact.phone}</span>}
-            {contact.location && <span>{contact.location}</span>}
-            {contact.website && <span>{contact.website}</span>}
-            {contact.linkedin && <span>{contact.linkedin}</span>}
-            {contact.github && <span>{contact.github}</span>}
-          </div>
-          <div style={{ height: 2, backgroundColor: accentColor, marginTop: 10 }} />
+          <div style={{ fontSize: 9, color: '#333' }}>{contactLine.join('  |  ')}</div>
         </div>
       )}
 
-      {/* Ordered sections */}
       {ordered.map((section) => (
-        <div key={section.id} style={{ marginBottom: 10 }}>
-          {section.type === 'summary' && summary && (
+        <div key={section.id} style={{ marginBottom: 11 }}>
+          {section.type === 'summary' && summary && summary.text && (
             <>
-              <SectionTitle title="Professional Summary" color={accentColor} />
-              <p style={{ fontSize: 9.5, color: '#333' }}>{summary.text}</p>
+              <SectionTitle title="Summary" color={accentColor} />
+              <p style={{ fontSize: 9.5, color: '#222' }}>{summary.text}</p>
             </>
           )}
 
           {section.type === 'experience' && experience && (
             <>
-              <SectionTitle title="Experience" color={accentColor} />
+              <SectionTitle title="Work Experience" color={accentColor} />
               {experience.items.map((item) => (
                 <div key={item.id} style={{ marginBottom: 8 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <div>
-                      <span style={{ fontWeight: 700, fontSize: 10 }}>{item.title || 'Job Title'}</span>
-                      {item.company && <span style={{ color: '#555', fontSize: 9.5 }}> — {item.company}</span>}
-                    </div>
-                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
-                      {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
-                      {item.location ? ` · ${item.location}` : ''}
-                    </span>
-                  </div>
+                  <EntryHeader
+                    org={item.company || 'Company'}
+                    location={item.location}
+                    role={item.title}
+                    dates={dateRange(item.startDate, item.endDate, item.current)}
+                  />
                   {item.bullets.filter(Boolean).length > 0 && (
-                    <ul style={{ margin: '4px 0 0 14px', padding: 0 }}>
-                      {item.bullets.filter(Boolean).map((b, i) => (
-                        <li key={i} style={{ fontSize: 9.5, color: '#333', marginBottom: 2 }}>{b}</li>
-                      ))}
+                    <ul style={ul}>
+                      {item.bullets.filter(Boolean).map((b, i) => <li key={i} style={li}>{b}</li>)}
                     </ul>
                   )}
                 </div>
@@ -91,32 +119,14 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
             <>
               <SectionTitle title="Education" color={accentColor} />
               {education.items.map((item) => (
-                <div key={item.id} style={{ marginBottom: 6 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div>
-                      <span style={{ fontWeight: 700, fontSize: 10 }}>{item.school || 'School'}</span>
-                      {(item.degree || item.field) && (
-                        <span style={{ fontSize: 9.5, color: '#555' }}> · {[item.degree, item.field].filter(Boolean).join(' in ')}</span>
-                      )}
-                    </div>
-                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
-                      {[item.startDate, item.endDate].filter(Boolean).join(' – ')}
-                      {item.location ? ` · ${item.location}` : ''}
-                    </span>
-                  </div>
-                  {item.gpa && <p style={{ fontSize: 9, color: '#555', marginTop: 1 }}>GPA: {item.gpa}</p>}
-                </div>
-              ))}
-            </>
-          )}
-
-          {section.type === 'skills' && skills && (
-            <>
-              <SectionTitle title="Skills" color={accentColor} />
-              {skills.categories.map((cat) => (
-                <div key={cat.id} style={{ marginBottom: 3 }}>
-                  {cat.name && <span style={{ fontWeight: 700, fontSize: 9.5 }}>{cat.name}: </span>}
-                  <span style={{ fontSize: 9.5, color: '#333' }}>{cat.skills}</span>
+                <div key={item.id} style={{ marginBottom: 7 }}>
+                  <EntryHeader
+                    org={item.school || 'School'}
+                    location={item.location}
+                    role={[item.degree, item.field].filter(Boolean).join(', ')}
+                    dates={dateRange(item.startDate, item.endDate)}
+                  />
+                  {item.gpa && <p style={{ fontSize: 9.5, color: '#333', marginTop: 1 }}>GPA: {item.gpa}</p>}
                 </div>
               ))}
             </>
@@ -127,22 +137,28 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
               <SectionTitle title="Projects" color={accentColor} />
               {projects.items.map((item) => (
                 <div key={item.id} style={{ marginBottom: 8 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <span style={{ fontWeight: 700, fontSize: 10 }}>{item.name || 'Project Name'}</span>
-                    {item.link && <span style={{ fontSize: 9, color: accentColor }}>{item.link}</span>}
-                  </div>
-                  {item.technologies && (
-                    <p style={{ fontSize: 9, color: '#777', marginTop: 1 }}>
-                      <em>{item.technologies}</em>
-                    </p>
-                  )}
+                  <EntryHeader
+                    org={item.name || 'Project'}
+                    location={item.link || undefined}
+                    role={item.technologies}
+                  />
                   {item.bullets.filter(Boolean).length > 0 && (
-                    <ul style={{ margin: '4px 0 0 14px', padding: 0 }}>
-                      {item.bullets.filter(Boolean).map((b, i) => (
-                        <li key={i} style={{ fontSize: 9.5, color: '#333', marginBottom: 2 }}>{b}</li>
-                      ))}
+                    <ul style={ul}>
+                      {item.bullets.filter(Boolean).map((b, i) => <li key={i} style={li}>{b}</li>)}
                     </ul>
                   )}
+                </div>
+              ))}
+            </>
+          )}
+
+          {section.type === 'skills' && skills && (
+            <>
+              <SectionTitle title="Additional" color={accentColor} />
+              {skills.categories.map((cat) => (
+                <div key={cat.id} style={{ marginBottom: 2, fontSize: 9.5 }}>
+                  {cat.name && <span style={{ fontWeight: 700 }}>{cat.name}: </span>}
+                  <span style={{ color: '#222' }}>{cat.skills}</span>
                 </div>
               ))}
             </>
@@ -152,12 +168,12 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
             <>
               <SectionTitle title="Certifications" color={accentColor} />
               {certifications.items.map((item) => (
-                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <div>
+                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 3 }}>
+                  <span style={{ minWidth: 0 }}>
                     <span style={{ fontWeight: 700, fontSize: 9.5 }}>{item.name}</span>
-                    {item.issuer && <span style={{ fontSize: 9, color: '#555' }}> · {item.issuer}</span>}
-                  </div>
-                  <span style={{ fontSize: 9, color: '#777' }}>{item.date}</span>
+                    {item.issuer && <span style={{ fontSize: 9.5, color: '#444' }}> · {item.issuer}</span>}
+                  </span>
+                  <span style={{ fontSize: 9.5, color: '#444', flexShrink: 0, whiteSpace: 'nowrap' }}>{item.date}</span>
                 </div>
               ))}
             </>
@@ -166,11 +182,9 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
           {section.type === 'languages' && languages && (
             <>
               <SectionTitle title="Languages" color={accentColor} />
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 16px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px 16px', fontSize: 9.5 }}>
                 {languages.items.map((item) => (
-                  <span key={item.id} style={{ fontSize: 9.5 }}>
-                    <strong>{item.language}</strong> ({item.proficiency})
-                  </span>
+                  <span key={item.id}><strong>{item.language}</strong> ({item.proficiency})</span>
                 ))}
               </div>
             </>
