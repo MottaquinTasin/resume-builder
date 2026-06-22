@@ -1,10 +1,10 @@
-import type { ResumeData } from '@/lib/types';
+import type { WorkspaceData } from '@/lib/types';
 import { createClient } from './client';
 
 export interface ResumeRecord {
   id: string;
   title: string;
-  data: ResumeData;
+  data: WorkspaceData;
   created_at: string;
   updated_at: string;
 }
@@ -30,7 +30,7 @@ export async function getResume(id: string): Promise<ResumeRecord | null> {
   return data as ResumeRecord;
 }
 
-export async function createResume(title: string, data: ResumeData): Promise<ResumeRecord> {
+export async function createResume(title: string, data: WorkspaceData): Promise<ResumeRecord> {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const { data: record, error } = await supabase
@@ -42,7 +42,7 @@ export async function createResume(title: string, data: ResumeData): Promise<Res
   return record as ResumeRecord;
 }
 
-export async function updateResume(id: string, patch: { title?: string; data?: ResumeData }): Promise<void> {
+export async function updateResume(id: string, patch: { title?: string; data?: WorkspaceData }): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from('resumes').update(patch).eq('id', id);
   if (error) throw error;

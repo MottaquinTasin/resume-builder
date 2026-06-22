@@ -1,20 +1,20 @@
-import type { ResumeData } from './types';
-import { defaultResumeData } from './defaultData';
+import type { WorkspaceData } from './types';
+import { defaultWorkspace } from './defaultData';
 
-const KEY = 'resume-builder-data';
+const KEY = 'resume-builder-workspace';
 
-export function loadResume(): ResumeData {
-  if (typeof window === 'undefined') return defaultResumeData;
+export function loadWorkspace(): WorkspaceData {
+  if (typeof window === 'undefined') return defaultWorkspace;
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return defaultResumeData;
-    return JSON.parse(raw) as ResumeData;
+    if (!raw) return defaultWorkspace;
+    return { ...defaultWorkspace, ...JSON.parse(raw) } as WorkspaceData;
   } catch {
-    return defaultResumeData;
+    return defaultWorkspace;
   }
 }
 
-export function saveResume(data: ResumeData): void {
+export function saveWorkspace(data: WorkspaceData): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(KEY, JSON.stringify(data));
@@ -23,7 +23,7 @@ export function saveResume(data: ResumeData): void {
   }
 }
 
-export function clearResume(): void {
+export function clearWorkspace(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(KEY);
 }
