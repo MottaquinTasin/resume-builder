@@ -67,7 +67,7 @@ export default function MinimalTemplate({ sections, accentColor }: Props) {
                       <span style={{ fontWeight: 600, fontSize: 10.5 }}>{item.title || 'Job Title'}</span>
                       {item.company && <span style={{ color: '#555', fontSize: 10 }}>, {item.company}</span>}
                     </div>
-                    <span style={{ fontSize: 8.5, color: '#aaa', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontSize: 8.5, color: '#aaa', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
                       {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
                       {item.location ? ` · ${item.location}` : ''}
                     </span>

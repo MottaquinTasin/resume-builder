@@ -27,6 +27,20 @@ export default function JapaneseExtrasEditor({ jp, onChange }: Props) {
         </div>
       </div>
       <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground">緊急連絡先</label>
+        <Input value={jp.emergencyContact} onChange={(e) => onChange({ emergencyContact: e.target.value })} placeholder="同上 / 連絡先" />
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground">趣味・特技</label>
+        <Textarea
+          value={jp.hobbies}
+          onChange={(e) => onChange({ hobbies: e.target.value })}
+          rows={2}
+          className="resize-none text-sm"
+          placeholder="趣味は…、特技は…"
+        />
+      </div>
+      <div className="space-y-1.5">
         <label className="text-xs font-medium text-muted-foreground">配偶者</label>
         <select
           value={jp.spouse}

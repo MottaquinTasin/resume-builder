@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
+import AuthComingSoon from '@/components/AuthComingSoon';
 import { toast } from 'sonner';
 
 export default function LoginForm() {
@@ -17,6 +18,8 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  if (!isSupabaseConfigured) return <AuthComingSoon />;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

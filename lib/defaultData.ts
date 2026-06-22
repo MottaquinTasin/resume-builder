@@ -108,6 +108,8 @@ export const defaultWorkspace: WorkspaceData = {
         maxChars: 400,
       },
     ],
+    hobbies: '趣味は詩作とバドミントン。特技は戦略ゲームと料理です。',
+    emergencyContact: '同上',
     commute: '約 1 時間 0 分',
     dependents: '0 人',
     spouse: 'no',

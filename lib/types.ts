@@ -186,6 +186,8 @@ export interface JapaneseConfig {
   rirekishoDate: string; // 記入日 YYYY-MM-DD
   qualifications: QualificationItem[];
   essays: EssayItem[]; // self-introduction sheet (自己紹介書)
+  hobbies: string; // 趣味・特技
+  emergencyContact: string; // 緊急連絡先
   commute: string; // 通勤時間
   dependents: string; // 扶養家族
   spouse: 'yes' | 'no' | ''; // 配偶者

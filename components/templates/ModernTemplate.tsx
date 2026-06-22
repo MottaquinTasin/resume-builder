@@ -121,7 +121,7 @@ export default function ModernTemplate({ sections, accentColor }: Props) {
                           <span style={{ fontSize: 9.5, color: accentColor, fontWeight: 600 }}> @ {item.company}</span>
                         )}
                       </div>
-                      <span style={{ fontSize: 8.5, color: '#888', whiteSpace: 'nowrap' }}>
+                      <span style={{ fontSize: 8.5, color: '#888', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
                         {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
                       </span>
                     </div>

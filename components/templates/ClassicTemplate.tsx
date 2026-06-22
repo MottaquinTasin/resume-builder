@@ -5,10 +5,6 @@ interface Props {
   accentColor: string;
 }
 
-function Divider({ color }: { color: string }) {
-  return <hr style={{ borderColor: color, borderTopWidth: 2, marginTop: 8, marginBottom: 8 }} />;
-}
-
 function SectionTitle({ title, color }: { title: string; color: string }) {
   return (
     <div style={{ marginBottom: 6 }}>
@@ -74,7 +70,7 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
                       <span style={{ fontWeight: 700, fontSize: 10 }}>{item.title || 'Job Title'}</span>
                       {item.company && <span style={{ color: '#555', fontSize: 9.5 }}> — {item.company}</span>}
                     </div>
-                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
                       {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
                       {item.location ? ` · ${item.location}` : ''}
                     </span>
@@ -103,7 +99,7 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
                         <span style={{ fontSize: 9.5, color: '#555' }}> · {[item.degree, item.field].filter(Boolean).join(' in ')}</span>
                       )}
                     </div>
-                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontSize: 9, color: '#777', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
                       {[item.startDate, item.endDate].filter(Boolean).join(' – ')}
                       {item.location ? ` · ${item.location}` : ''}
                     </span>
