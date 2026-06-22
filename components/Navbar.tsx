@@ -18,9 +18,9 @@ interface Props {
 
 export default function Navbar({ user }: Props) {
   const router = useRouter();
-  const supabase = createClient();
 
   const signOut = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     router.push('/');
     router.refresh();
