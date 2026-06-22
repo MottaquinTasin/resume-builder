@@ -22,6 +22,7 @@ export default function MinimalTemplate({ sections, accentColor }: Props) {
   const education = get<EducationData>('education');
   const skills = get<SkillsData>('skills');
   const projects = get<ProjectsData>('projects');
+  const activities = get<ExperienceData>('activities');
   const certifications = get<CertificationsData>('certifications');
   const languages = get<LanguagesData>('languages');
 
@@ -136,6 +137,33 @@ export default function MinimalTemplate({ sections, accentColor }: Props) {
                     <ul style={{ margin: '4px 0 0 14px', padding: 0 }}>
                       {item.bullets.filter(Boolean).map((b, i) => (
                         <li key={i} style={{ fontSize: 9.5, color: '#444', marginBottom: 2 }}>{b}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
+
+          {section.type === 'activities' && activities && (
+            <>
+              <SectionTitle title="Activities" color={accentColor} />
+              {activities.items.map((item, idx) => (
+                <div key={item.id} style={{ marginBottom: idx < activities.items.length - 1 ? 12 : 0 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <div>
+                      <span style={{ fontWeight: 600, fontSize: 10.5 }}>{item.title || 'Role'}</span>
+                      {item.company && <span style={{ color: '#555', fontSize: 10 }}>, {item.company}</span>}
+                    </div>
+                    <span style={{ fontSize: 8.5, color: '#aaa', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
+                      {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
+                      {item.location ? ` · ${item.location}` : ''}
+                    </span>
+                  </div>
+                  {item.bullets.filter(Boolean).length > 0 && (
+                    <ul style={{ margin: '5px 0 0 0', padding: '0 0 0 14px' }}>
+                      {item.bullets.filter(Boolean).map((b, i) => (
+                        <li key={i} style={{ fontSize: 9.5, color: '#444', marginBottom: 3 }}>{b}</li>
                       ))}
                     </ul>
                   )}

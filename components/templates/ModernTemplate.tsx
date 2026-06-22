@@ -31,11 +31,12 @@ export default function ModernTemplate({ sections, accentColor }: Props) {
   const education = get<EducationData>('education');
   const skills = get<SkillsData>('skills');
   const projects = get<ProjectsData>('projects');
+  const activities = get<ExperienceData>('activities');
   const certifications = get<CertificationsData>('certifications');
   const languages = get<LanguagesData>('languages');
 
   const sidebarSections = sections.filter((s) => s.enabled && ['skills', 'certifications', 'languages'].includes(s.type));
-  const mainSections = sections.filter((s) => s.enabled && ['summary', 'experience', 'education', 'projects'].includes(s.type));
+  const mainSections = sections.filter((s) => s.enabled && ['summary', 'experience', 'education', 'projects', 'activities'].includes(s.type));
 
   return (
     <div style={{ display: 'flex', height: '100%', fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: 10, color: '#1a1a1a' }}>
@@ -170,6 +171,33 @@ export default function ModernTemplate({ sections, accentColor }: Props) {
                     {item.technologies && <p style={{ fontSize: 8.5, color: '#888', fontStyle: 'italic', marginTop: 1 }}>{item.technologies}</p>}
                     {item.bullets.filter(Boolean).length > 0 && (
                       <ul style={{ margin: '4px 0 0 14px', padding: 0 }}>
+                        {item.bullets.filter(Boolean).map((b, i) => (
+                          <li key={i} style={{ fontSize: 9.5, color: '#333', marginBottom: 2 }}>{b}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+
+            {section.type === 'activities' && activities && (
+              <>
+                <MainTitle title="Activities" color={accentColor} />
+                {activities.items.map((item) => (
+                  <div key={item.id} style={{ marginBottom: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                      <div>
+                        <span style={{ fontWeight: 700, fontSize: 10.5 }}>{item.title || 'Role'}</span>
+                        {item.company && <span style={{ fontSize: 9.5, color: accentColor, fontWeight: 600 }}> @ {item.company}</span>}
+                      </div>
+                      <span style={{ fontSize: 8.5, color: '#888', whiteSpace: 'nowrap', flexShrink: 0, paddingLeft: 10, textAlign: 'right' }}>
+                        {item.startDate}{(item.startDate && (item.current || item.endDate)) ? ' – ' : ''}{item.current ? 'Present' : item.endDate}
+                      </span>
+                    </div>
+                    {item.location && <p style={{ fontSize: 8.5, color: '#888', marginTop: 1 }}>{item.location}</p>}
+                    {item.bullets.filter(Boolean).length > 0 && (
+                      <ul style={{ margin: '5px 0 0 14px', padding: 0 }}>
                         {item.bullets.filter(Boolean).map((b, i) => (
                           <li key={i} style={{ fontSize: 9.5, color: '#333', marginBottom: 2 }}>{b}</li>
                         ))}

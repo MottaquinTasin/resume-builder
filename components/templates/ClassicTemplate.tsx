@@ -64,6 +64,7 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
   const education = get<EducationData>('education');
   const skills = get<SkillsData>('skills');
   const projects = get<ProjectsData>('projects');
+  const activities = get<ExperienceData>('activities');
   const certifications = get<CertificationsData>('certifications');
   const languages = get<LanguagesData>('languages');
 
@@ -141,6 +142,27 @@ export default function ClassicTemplate({ sections, accentColor }: Props) {
                     org={item.name || 'Project'}
                     location={item.link || undefined}
                     role={item.technologies}
+                  />
+                  {item.bullets.filter(Boolean).length > 0 && (
+                    <ul style={ul}>
+                      {item.bullets.filter(Boolean).map((b, i) => <li key={i} style={li}>{b}</li>)}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
+
+          {section.type === 'activities' && activities && (
+            <>
+              <SectionTitle title="Activities" color={accentColor} />
+              {activities.items.map((item) => (
+                <div key={item.id} style={{ marginBottom: 8 }}>
+                  <EntryHeader
+                    org={item.company || 'Organization'}
+                    location={item.location}
+                    role={item.title}
+                    dates={dateRange(item.startDate, item.endDate, item.current)}
                   />
                   {item.bullets.filter(Boolean).length > 0 && (
                     <ul style={ul}>

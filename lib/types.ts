@@ -7,6 +7,7 @@ export type SectionType =
   | 'education'
   | 'skills'
   | 'projects'
+  | 'activities'
   | 'certifications'
   | 'languages';
 
@@ -177,6 +178,7 @@ export interface EnglishConfig {
   summary: string;
   skills: SkillCategory[];
   projects: ProjectItem[];
+  activities: ExperienceItem[];
   sectionOrder: SectionType[];
   enabled: Record<string, boolean>;
 }

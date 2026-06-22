@@ -66,13 +66,26 @@ export const defaultWorkspace: WorkspaceData = {
         bullets: ['Built an open-source analytics platform with 2,000+ GitHub stars.'],
       },
     ],
-    sectionOrder: ['summary', 'experience', 'education', 'skills', 'projects'],
+    activities: [
+      {
+        id: 'act-1',
+        company: 'Entrepreneurship Club',
+        title: 'Vice President',
+        location: 'Beppu, Oita',
+        startDate: 'Sep 2025',
+        endDate: '',
+        current: true,
+        bullets: ['Grew the community to 12 members and hosted 3 companies on campus.'],
+      },
+    ],
+    sectionOrder: ['summary', 'education', 'experience', 'projects', 'activities', 'skills'],
     enabled: {
       summary: true,
-      experience: true,
       education: true,
-      skills: true,
+      experience: true,
       projects: true,
+      activities: true,
+      skills: true,
     },
   },
   japanese: {
@@ -167,6 +180,12 @@ export function workspaceToResumeData(ws: WorkspaceData): ResumeData {
       type: 'projects' as const,
       enabled: en.enabled.projects !== false,
       data: { items: en.projects },
+    },
+    activities: {
+      id: 'activities',
+      type: 'activities' as const,
+      enabled: en.enabled.activities !== false,
+      data: { items: en.activities ?? [] },
     },
   };
 

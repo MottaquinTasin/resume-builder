@@ -49,8 +49,9 @@ const EN_LABELS: Record<SectionType, string> = {
   summary: 'Summary',
   experience: 'Experience',
   education: 'Education',
-  skills: 'Skills',
+  skills: 'Additional',
   projects: 'Projects',
+  activities: 'Activities',
   certifications: 'Certifications',
   languages: 'Languages',
 };
@@ -274,6 +275,7 @@ export default function Builder({ initialData, resumeId, resumeTitle: initialTit
                         {type === 'education' && <EducationSection data={{ items: ws.education }} onChange={setEducation} />}
                         {type === 'skills' && <SkillsSection data={{ categories: ws.english.skills } as SkillsData} onChange={(d) => setEnglish({ skills: d.categories })} />}
                         {type === 'projects' && <ProjectsSection data={{ items: ws.english.projects } as ProjectsData} onChange={(d) => setEnglish({ projects: d.items })} />}
+                        {type === 'activities' && <ExperienceSection data={{ items: ws.english.activities ?? [] }} onChange={(d) => setEnglish({ activities: d.items })} />}
                       </EnSectionCard>
                     ))}
                   </SortableContext>
